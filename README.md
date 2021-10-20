@@ -2,6 +2,15 @@
 
 Compile asm code into C# functions on fly! For now supports only x86 Windows 64-bit.
 
+### Get started
+
+Get the lib (it's probably distributed by nuget) and it's recommended to write these usings:
+```cs
+using Iced.Intel;
+using static Iced.Intel.AssemblerRegisters;
+using AsmToDelegate;
+```
+
 ### Examples
 
 
