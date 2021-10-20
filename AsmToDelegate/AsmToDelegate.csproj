@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -6,9 +6,40 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
+<!--
+  <ItemGroup>
+    <Compile Update="PublicExtensions.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PublicExtensions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PublicExtensions.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>PublicExtensions.cs</LastGenOutput>
+    </Compile>
+  </ItemGroup>
+-->
+
+  <ItemGroup>
+    <Compile Update="PublicExtensions.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PublicExtensions.tt</DependentUpon>
+    </Compile>
+    <None Update="PublicExtensions.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>PublicExtensions.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Iced" Version="1.15.0" />
     <PackageReference Include="System.Memory" Version="4.5.4" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
 
 </Project>

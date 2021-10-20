@@ -1,0 +1,43 @@
+﻿using Iced.Intel;
+using System;
+using System.IO;
+
+namespace AsmToDelegate;
+
+public unsafe static class Extensions
+{
+<# for (int i = 0; i < 8; i++) { #>
+<#
+    var ins = "";
+    for (int j = 1; j <= i; j++)
+        ins += $"TIn{j}, ";
+#>
+    public struct UnmanagedFunctionWinX64<<#= ins #>TOut>
+    {
+        public delegate* unmanaged[Cdecl]<<#= ins #>TOut> Delegate { get; }
+
+        public UnmanagedUntypedFuncInfo FuncInfo { get; }
+
+        public UnmanagedFunctionWinX64(delegate* unmanaged[Cdecl]<<#= ins #>TOut> fnptr, UnmanagedUntypedFuncInfo funcInfo)
+        {
+            Delegate = fnptr;
+            FuncInfo = funcInfo;
+        }
+
+        public void Free() => FuncInfo.Free();
+    }
+
+    public static UnmanagedFunctionWinX64<<#= ins #>TOut> ToUnmanagedFunctionWinX64<<#= ins #>TOut>(this Assembler asm)
+    {
+        var s = BuilderToMemory.CompileX64Windows(asm);
+        return new UnmanagedFunctionWinX64<<#= ins #>TOut>((delegate* unmanaged[Cdecl]<<#= ins #>TOut>)s.Pointer, s);
+    }
+
+    public static delegate* unmanaged[Cdecl]<<#= ins #>TOut> ToFunctionPointerWinX64<<#= ins #>TOut>(this Assembler asm)
+    {
+        var s = BuilderToMemory.CompileX64Windows(asm);
+        return (delegate* unmanaged[Cdecl]<<#= ins #>TOut>)s.Pointer;
+    }
+
+<# } #> 
+} 
