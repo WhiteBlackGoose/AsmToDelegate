@@ -52,4 +52,24 @@ public unsafe class TestsWinX64
         var sqr = asm.ToFunctionPointerWinX64<long, long>();
         Assert.Equal(9L, sqr(-3));
     }
+
+    [Fact]
+    public void Test4()
+    {
+        var asm = new Assembler(bitness: 64);
+
+        var a = rcx;
+        var b = rdx;
+        var c = r8;
+        var d = r9;
+
+        asm.mov(rax, a);
+        asm.imul(rax, b);
+        asm.mov(rbx, c);
+        asm.imul(rbx, d);
+        asm.add(rax, rbx);
+        asm.ret();
+        var add = asm.ToFunctionPointerWinX64<long, long, long, long, long>();
+        Assert.Equal(210L, add(5, 2, 10, 20));
+    }
 }
