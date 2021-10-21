@@ -1,16 +1,14 @@
-﻿using AsmToDelegate;
+﻿using System;
 using System.Diagnostics;
 using Plotly.NET;
 using HonkPerf.NET.RefLinq;
+using System.Collections.Generic;
+#if NET6_0_OR_GREATER
 using System.Runtime.InteropServices;
+#endif
 
 namespace NaiveNanoBench;
 
-/// <summary>
-/// Warm up automatically finds the correct number of invokations per iteration
-/// 
-/// 
-/// </summary>
 public sealed unsafe class NanoBench
 {
     private readonly ulong warmupIterations;
@@ -19,9 +17,11 @@ public sealed unsafe class NanoBench
     private readonly double timePerIteration;
     private readonly Stopwatch sw = new();
     private readonly List<double> results = new();
+    private readonly ulong userInvokationsPerCall;
 
-    public NanoBench(ulong warmupIterations = 10, ulong actualIterations = 100, double timePerIteration = 1.0, ulong defaultWarmupInvokationsPerIteration = 100_000)
+    public NanoBench(ulong userInvokationsPerCall = 1, ulong warmupIterations = 10, ulong actualIterations = 100, double timePerIteration = 1.0, ulong defaultWarmupInvokationsPerIteration = 100_000)
     {
+        this.userInvokationsPerCall = userInvokationsPerCall;
         this.warmupIterations = warmupIterations;
         this.actualIterations = actualIterations;
         this.timePerIteration = timePerIteration;
@@ -29,7 +29,13 @@ public sealed unsafe class NanoBench
     }
 
     private const ulong LoopUnroll = 32;
-    private (double Mean, double Total) MeasureMeanTime(delegate* unmanaged[Cdecl, SuppressGCTransition]<ulong, ulong> del, ulong invokations)
+    private (double Mean, double Total) MeasureMeanTime(
+#if NET6_0_OR_GREATER
+        delegate* unmanaged[Cdecl, SuppressGCTransition]<ulong, ulong> del,
+#else
+        delegate* unmanaged[Cdecl]<ulong, ulong> del,
+#endif
+        ulong invokations)
     {
         sw.Reset();
         sw.Start();
@@ -61,12 +67,18 @@ public sealed unsafe class NanoBench
         return $"{time * 1_000_000_000:0.###} ns.";
     }
 
-    [SuppressGCTransition]
-    public void Bench(Extensions.UnmanagedFunctionWinX64<ulong, ulong> func)
+    
+    public void Bench(delegate* unmanaged[Cdecl]<ulong, ulong> func)
     {
         results.Clear();
-        var del = (delegate* unmanaged[Cdecl, SuppressGCTransition]<ulong, ulong>)func.Delegate;
 
+        var del = 
+#if NET6_0_OR_GREATER
+        (delegate* unmanaged[Cdecl, SuppressGCTransition]<ulong, ulong>)
+#else
+        (delegate* unmanaged[Cdecl]<ulong, ulong>)
+#endif
+        func;
 
         Console.WriteLine("Warm up...");
 
@@ -74,7 +86,7 @@ public sealed unsafe class NanoBench
         for (ulong i = 0; i < warmupIterations; i++)
         {
             var (mean, total) = MeasureMeanTime(del, warmupInvokationsPerIteration);
-            if (total < 0.1)
+            if (total < 0.5)
             {
                 warmupInvokationsPerIteration = 3 * warmupInvokationsPerIteration / 2;
                 Console.WriteLine($"Skipping {i + 1}, as {FormatTimePerInvoke(total)} is too little");
@@ -89,11 +101,11 @@ public sealed unsafe class NanoBench
                 continue;
             }
             measuredSum += mean;
-            Console.WriteLine($"Warm up {i + 1} / {warmupIterations}: {FormatTimePerInvoke(mean)} per invokation");
+            Console.WriteLine($"Warm up {i + 1} / {warmupIterations}: {FormatTimePerInvoke(mean / userInvokationsPerCall)} per invokation");
         }
 
         var avg = measuredSum / warmupIterations;
-        Console.WriteLine($"Average warmup time: {FormatTimePerInvoke(avg)}");
+        Console.WriteLine($"Average warmup time: {FormatTimePerInvoke(avg / userInvokationsPerCall)}");
 
         var actualInvokationsPerIteration = (ulong)(timePerIteration / avg);
         Console.WriteLine($"Actual invokations per iteration: {actualInvokationsPerIteration}");
@@ -104,10 +116,10 @@ public sealed unsafe class NanoBench
         {
             var (mean, _) = MeasureMeanTime(del, actualInvokationsPerIteration);
             results.Add(mean);
-            Console.WriteLine($"Actual {i + 1} / {actualIterations}: {FormatTimePerInvoke(mean)} per invokation");
+            Console.WriteLine($"Actual {i + 1} / {actualIterations}: {FormatTimePerInvoke(mean / userInvokationsPerCall)} per invokation");
         }
 
-        Console.WriteLine($"\nMean: {FormatTimePerInvoke(results.ToRefLinq().Average())}\n");
+        Console.WriteLine($"\nMean: {FormatTimePerInvoke(results.ToRefLinq().Average() / userInvokationsPerCall)}\n");
     }
 
     public IList<double> LastResults => results;

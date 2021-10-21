@@ -1,7 +1,6 @@
 ﻿using Iced.Intel;
 using static Iced.Intel.AssemblerRegisters;
 using AsmToDelegate;
-using System.Diagnostics;
 using NaiveNanoBench;
 
 unsafe
@@ -24,11 +23,11 @@ unsafe
 
     var dummyCompiled = dummy.ToUnmanagedFunctionWinX64<ulong, ulong>();
 
-    var bench = new NanoBench();
+    var bench = new NanoBench(userInvokationsPerCall: 1000);
 
-    bench.Bench(compiled);
+    bench.Bench(compiled.Delegate);
     bench.ShowDistributionOfResults();
 
-    bench.Bench(dummyCompiled);
-    bench.ShowDistributionOfResults();
+    // bench.Bench(dummyCompiled.Delegate);
+    // bench.ShowDistributionOfResults();
 }

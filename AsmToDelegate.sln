@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsmToDelegate.Tests", "AsmT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NaiveNanoBench", "NaiveNanoBench\NaiveNanoBench.csproj", "{1F20BEED-1428-4B98-BA8F-5DC567A5C2E6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NaiveNanoBench.Playground", "NaiveNanoBench.Playground\NaiveNanoBench.Playground.csproj", "{7A9BB523-2146-4E30-95F6-416F6ED923B0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{1F20BEED-1428-4B98-BA8F-5DC567A5C2E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F20BEED-1428-4B98-BA8F-5DC567A5C2E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F20BEED-1428-4B98-BA8F-5DC567A5C2E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A9BB523-2146-4E30-95F6-416F6ED923B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A9BB523-2146-4E30-95F6-416F6ED923B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A9BB523-2146-4E30-95F6-416F6ED923B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A9BB523-2146-4E30-95F6-416F6ED923B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
