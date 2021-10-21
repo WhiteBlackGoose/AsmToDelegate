@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using Plotly.NET;
 using HonkPerf.NET.RefLinq;
+using System.Runtime.InteropServices;
 
 namespace NaiveNanoBench;
 
@@ -28,7 +29,7 @@ public sealed unsafe class NanoBench
     }
 
     private const ulong LoopUnroll = 32;
-    private (double Mean, double Total) MeasureMeanTime(delegate* unmanaged[Cdecl]<ulong, ulong> del, ulong invokations)
+    private (double Mean, double Total) MeasureMeanTime(delegate* unmanaged[Cdecl, SuppressGCTransition]<ulong, ulong> del, ulong invokations)
     {
         sw.Reset();
         sw.Start();
@@ -60,10 +61,11 @@ public sealed unsafe class NanoBench
         return $"{time * 1_000_000_000:0.###} ns.";
     }
 
+    [SuppressGCTransition]
     public void Bench(Extensions.UnmanagedFunctionWinX64<ulong, ulong> func)
     {
         results.Clear();
-        var del = func.Delegate;
+        var del = (delegate* unmanaged[Cdecl, SuppressGCTransition]<ulong, ulong>)func.Delegate;
 
 
         Console.WriteLine("Warm up...");
