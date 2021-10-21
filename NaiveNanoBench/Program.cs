@@ -11,9 +11,9 @@ unsafe
     for (int i = 0; i < 1000; i++)
     {
         fourInstructions.mov(rcx, 6);
-        fourInstructions.mov(r8, 10);
-        fourInstructions.add(eax, r8d);
-        fourInstructions.add(eax, ecx);
+        // fourInstructions.mov(r8, 10);
+        // fourInstructions.add(eax, r8d);
+        // fourInstructions.add(eax, ecx);
     }
     fourInstructions.ret();
 
@@ -24,7 +24,7 @@ unsafe
 
     var dummyCompiled = dummy.ToUnmanagedFunctionWinX64<ulong, ulong>();
 
-    var bench = new NanoBench(10, 100, 1.0);
+    var bench = new NanoBench();
 
     bench.Bench(compiled);
     bench.ShowDistributionOfResults();

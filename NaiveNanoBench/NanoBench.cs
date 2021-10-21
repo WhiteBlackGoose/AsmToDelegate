@@ -5,6 +5,11 @@ using HonkPerf.NET.RefLinq;
 
 namespace NaiveNanoBench;
 
+/// <summary>
+/// Warm up automatically finds the correct number of invokations per iteration
+/// 
+/// 
+/// </summary>
 public sealed unsafe class NanoBench
 {
     private readonly ulong warmupIterations;
@@ -14,7 +19,7 @@ public sealed unsafe class NanoBench
     private readonly Stopwatch sw = new();
     private readonly List<double> results = new();
 
-    public NanoBench(ulong warmupIterations, ulong actualIterations, double timePerIteration, ulong defaultWarmupInvokationsPerIteration = 100_000)
+    public NanoBench(ulong warmupIterations = 10, ulong actualIterations = 100, double timePerIteration = 1.0, ulong defaultWarmupInvokationsPerIteration = 100_000)
     {
         this.warmupIterations = warmupIterations;
         this.actualIterations = actualIterations;
@@ -86,7 +91,7 @@ public sealed unsafe class NanoBench
         }
 
         var avg = measuredSum / warmupIterations;
-        Console.WriteLine($"Average warmup time: {FormatTimePerInvoke(measuredSum)}");
+        Console.WriteLine($"Average warmup time: {FormatTimePerInvoke(avg)}");
 
         var actualInvokationsPerIteration = (ulong)(timePerIteration / avg);
         Console.WriteLine($"Actual invokations per iteration: {actualInvokationsPerIteration}");
