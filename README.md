@@ -82,4 +82,5 @@ not real answer to "how much time it takes to run a single `mov`".
 ```
 mean: 175 ns.
 ```
-![][./distr.png]
+
+![](./distr.png)
