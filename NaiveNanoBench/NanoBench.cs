@@ -19,7 +19,7 @@ public sealed unsafe class NanoBench
     private readonly List<double> results = new();
     private readonly ulong userInvokationsPerCall;
 
-    public NanoBench(ulong userInvokationsPerCall = 1, ulong warmupIterations = 10, ulong actualIterations = 100, double timePerIteration = 1.0, ulong defaultWarmupInvokationsPerIteration = 100_000)
+    public NanoBench(ulong userInvokationsPerCall = 1, ulong warmupIterations = 20, ulong actualIterations = 100, double timePerIteration = 1.0, ulong defaultWarmupInvokationsPerIteration = 100_000)
     {
         this.userInvokationsPerCall = userInvokationsPerCall;
         this.warmupIterations = warmupIterations;

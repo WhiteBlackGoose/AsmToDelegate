@@ -5,18 +5,18 @@ using NaiveNanoBench;
 
 unsafe
 {
+    // var movFunction = new Assembler(bitness: 64);
+    // for (int i = 0; i < 1000; i++)
+    // {
+    //     movFunction.mov(rcx, 6);
+    // }
+    // movFunction.ret();
 
-    var fourInstructions = new Assembler(bitness: 64);
-    for (int i = 0; i < 1000; i++)
-    {
-        fourInstructions.mov(rcx, 6);
-        // fourInstructions.mov(r8, 10);
-        // fourInstructions.add(eax, r8d);
-        // fourInstructions.add(eax, ecx);
-    }
-    fourInstructions.ret();
+    var movFunction = new Assembler(bitness: 64);
+    var label = movFunction.CreateLabel();
 
-    var compiled = fourInstructions.ToUnmanagedFunctionWinX64<ulong, ulong>();
+
+    var compiled = movFunction.ToUnmanagedFunctionWinX64<ulong, ulong>();
 
     var dummy = new Assembler(bitness: 64);
     dummy.ret();
@@ -26,7 +26,7 @@ unsafe
     var bench = new NanoBench(userInvokationsPerCall: 1000);
 
     bench.Bench(compiled.Delegate);
-    bench.ShowDistributionOfResults();
+    // bench.ShowDistributionOfResults();
 
     // bench.Bench(dummyCompiled.Delegate);
     // bench.ShowDistributionOfResults();

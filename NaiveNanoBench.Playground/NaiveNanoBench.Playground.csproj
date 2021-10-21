@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" Version="0.13.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\AsmToDelegate\AsmToDelegate.csproj" />
     <ProjectReference Include="..\NaiveNanoBench\NaiveNanoBench.csproj" />
   </ItemGroup>
