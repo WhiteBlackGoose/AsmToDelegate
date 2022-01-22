@@ -13,7 +13,7 @@ using AsmToDelegate;
 
 ## Examples
 
-
+### Add two integers
 Adds two integers:
 ```cs
 var asm = new Assembler(bitness: 64);
@@ -24,6 +24,7 @@ var add = asm.ToFunctionPointerWinX64<ulong, ulong, ulong>();
 Assert.Equal(44ul, add(31, 13));
 ```
 
+### Something complex
 Finds `a * b + c * d`:
 ```cs
 var asm = new Assembler(bitness: 64);
@@ -45,6 +46,7 @@ Assert.Equal(210L, add(5, 2, 10, 20));
 
 ... assuming the [conventions](https://docs.microsoft.com/en-us/cpp/build/x64-calling-convention?view=msvc-160).
 
+### Compute TSC
 Returns [**Time Stamp Counter**](https://en.wikipedia.org/wiki/Time_Stamp_Counter):
 ```cs
 var asm = new Assembler(bitness: 64);
