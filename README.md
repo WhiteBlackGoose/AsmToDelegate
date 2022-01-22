@@ -45,6 +45,17 @@ Assert.Equal(210L, add(5, 2, 10, 20));
 
 ... assuming the [conventions](https://docs.microsoft.com/en-us/cpp/build/x64-calling-convention?view=msvc-160).
 
+Returns [**Time Stamp Counter**](https://en.wikipedia.org/wiki/Time_Stamp_Counter):
+```cs
+var asm = new Assembler(bitness: 64);
+asm.rdtsc();
+asm.shl(rdx, 32);
+asm.add(rax, rdx);
+asm.ret();
+var tsc = asm.ToFunctionPointerWinX64<ulong>();
+Console.WriteLine($"{tsc()} cycles since last reset");
+```
+
 ## NaiveNanoBench
 
 I was inspired by [nanoBench](https://github.com/andreas-abel/nanoBench), advanced linux tool for measuring

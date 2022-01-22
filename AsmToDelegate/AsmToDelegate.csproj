@@ -4,6 +4,16 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>preview</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
+    <Version>0.0.1-alpha</Version>
+    <Authors>WhiteBlackGoose</Authors>
+    <Copyright>© WhiteBlackGoose 2021-2022</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryType>git</RepositoryType>
+    <PackageReleaseNotes>Cursed (so far windows-only) thing which ehhhhhhhh lazy to write more.</PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/WhiteBlackGoose/AsmToDelegate</RepositoryUrl>
+    <PackageTags>performance, jit, codegen</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
 <!--
