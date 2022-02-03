@@ -1,35 +1,46 @@
-﻿module AsmToDelegate.FSharp.Syntax
+﻿module AsmToDelegate.FSharp
 
 open Iced.Intel
-open type Iced.Intel.AssemblerRegisters
+open AsmToDelegate
 
-let inline mov (a : ^a0) (b : ^a1) (asm : ^a when ^a : (member mov : ^a0 * ^a1 -> unit)) =    
-    ((^a) : (member mov : ^a0 * ^a1 -> unit) (asm, a, b))
+let rdtsc = ("rdtsc", obj ())
 
-let inline add (a : ^a0) (b : ^a1) (asm : ^a when ^a : (member add : ^a0 * ^a1 -> unit)) =    
-    ((^a) : (member add : ^a0 * ^a1 -> unit) (asm, a, b))
+let shl a b = ("shl", (a, b) :> obj)
 
-let ret (asm : Assembler) =
-    asm.ret ()
+let ret = ("ret", obj ())
+
+let mov a b = ("mov", (a, b) :> obj)
+
+let add a b = ("add", (a, b) :> obj)
 
 type AsmBuilder () =
-    member private this.Assembler : Assembler = Assembler 64
+    member _.Yield el = [ el ]
 
-    member inline this.Yield (m : ^a -> unit when ^a : (member mov : ^a0 * ^a1 -> unit)) =
-        m (this.Assembler :> obj :?> ^a)
+    member _.Delay f = f()
 
-    member this.Delay(f) = f()
+    member _.Combine (a, b) = List.append a b
 
-    member this.Zero () =
-        ()
-
-    member this.Combine (a, b) =
-        this
-
+    member _.Run list =
+        let assembler = Assembler(64)
+        for name, args in list do
+            let requestedTypes, requestedValues =
+                let argsType = args.GetType()
+                argsType.GenericTypeArguments |> List.ofArray,
+                argsType.GetProperties() |> Array.map (fun c -> c.GetValue(args))
+            let mis =
+                typeof<Assembler>.GetMethods()
+                |> Seq.filter (fun mi -> mi.Name = name)
+                |> Seq.filter (fun mi ->
+                    let miParamTypes =
+                        mi.GetParameters()
+                        |> Seq.map (fun p -> p.ParameterType)
+                        |> List.ofSeq
+                    miParamTypes = requestedTypes)
+                |> List.ofSeq
+            match Seq.tryExactlyOne mis with
+            | None -> raise (System.Exception $"Ohno! Found: {mis} for {name}")
+            | Some mi -> mi.Invoke(assembler, requestedValues) |> ignore
+        let del = assembler.ToDelegateUnsafe<int64>()
+        del.Invoke
+        
 let asm = AsmBuilder ()
-
-asm {    
-    yield (mov rax rcx)
-    yield (add rax rdx)
-    yield ret
-} |> ignore

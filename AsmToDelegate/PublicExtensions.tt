@@ -1,6 +1,7 @@
 ﻿using Iced.Intel;
 using System;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace AsmToDelegate;
 
@@ -47,8 +48,10 @@ public unsafe static class Extensions
     public static Func<<#= ins #>TOut> ToDelegate<<#= ins #>TOut>(this Assembler asm)
     {
         var s = BuilderToMemory.CompileX64Windows(asm);
+        // return Marshal.GetDelegateForFunctionPointer<Func<<#= ins #>TOut>>((IntPtr)s.Pointer);
+        var ptr = (long)(IntPtr)s.Pointer;
         return ((<#= passed #>) => {
-            var del = (delegate* unmanaged[Cdecl]<<#= ins #>TOut>)s.Pointer;
+            var del = (delegate* unmanaged[Cdecl]<<#= ins #>TOut>)ptr;
             return del(<#= passed #>);
         });
     }

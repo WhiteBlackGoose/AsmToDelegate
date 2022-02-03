@@ -58,6 +58,25 @@ var tsc = asm.ToFunctionPointerWinX64<ulong>();
 Console.WriteLine($"{tsc()} cycles since last reset");
 ```
 
+### What about F#?
+
+F# has *computation expressions* which allow for an absolutely mind-blowing syntax.
+
+Here's the same function which computes the number of cycles.
+```fs
+open AsmToDelegate.FSharp
+
+let getCycles = asm {
+    rdtsc
+    shl rdx 32uy
+    add rax rdx
+    ret
+}
+
+printfn $"{getCycles ()}"
+
+```
+
 ## NaiveNanoBench
 
 I was inspired by [nanoBench](https://github.com/andreas-abel/nanoBench), advanced linux tool for measuring

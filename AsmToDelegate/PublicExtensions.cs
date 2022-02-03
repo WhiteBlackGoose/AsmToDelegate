@@ -1,6 +1,7 @@
 ﻿using Iced.Intel;
 using System;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace AsmToDelegate;
 
@@ -36,8 +37,10 @@ public unsafe static class Extensions
     public static Func<TOut> ToDelegate<TOut>(this Assembler asm)
     {
         var s = BuilderToMemory.CompileX64Windows(asm);
+        // return Marshal.GetDelegateForFunctionPointer<Func<TOut>>((IntPtr)s.Pointer);
+        var ptr = (long)(IntPtr)s.Pointer;
         return (() => {
-            var del = (delegate* unmanaged[Cdecl]<TOut>)s.Pointer;
+            var del = (delegate* unmanaged[Cdecl]<TOut>)ptr;
             return del();
         });
     }
@@ -72,8 +75,10 @@ public unsafe static class Extensions
     public static Func<TIn1, TOut> ToDelegate<TIn1, TOut>(this Assembler asm)
     {
         var s = BuilderToMemory.CompileX64Windows(asm);
+        // return Marshal.GetDelegateForFunctionPointer<Func<TIn1, TOut>>((IntPtr)s.Pointer);
+        var ptr = (long)(IntPtr)s.Pointer;
         return ((a1) => {
-            var del = (delegate* unmanaged[Cdecl]<TIn1, TOut>)s.Pointer;
+            var del = (delegate* unmanaged[Cdecl]<TIn1, TOut>)ptr;
             return del(a1);
         });
     }
@@ -108,8 +113,10 @@ public unsafe static class Extensions
     public static Func<TIn1, TIn2, TOut> ToDelegate<TIn1, TIn2, TOut>(this Assembler asm)
     {
         var s = BuilderToMemory.CompileX64Windows(asm);
+        // return Marshal.GetDelegateForFunctionPointer<Func<TIn1, TIn2, TOut>>((IntPtr)s.Pointer);
+        var ptr = (long)(IntPtr)s.Pointer;
         return ((a1, a2) => {
-            var del = (delegate* unmanaged[Cdecl]<TIn1, TIn2, TOut>)s.Pointer;
+            var del = (delegate* unmanaged[Cdecl]<TIn1, TIn2, TOut>)ptr;
             return del(a1, a2);
         });
     }
@@ -144,8 +151,10 @@ public unsafe static class Extensions
     public static Func<TIn1, TIn2, TIn3, TOut> ToDelegate<TIn1, TIn2, TIn3, TOut>(this Assembler asm)
     {
         var s = BuilderToMemory.CompileX64Windows(asm);
+        // return Marshal.GetDelegateForFunctionPointer<Func<TIn1, TIn2, TIn3, TOut>>((IntPtr)s.Pointer);
+        var ptr = (long)(IntPtr)s.Pointer;
         return ((a1, a2, a3) => {
-            var del = (delegate* unmanaged[Cdecl]<TIn1, TIn2, TIn3, TOut>)s.Pointer;
+            var del = (delegate* unmanaged[Cdecl]<TIn1, TIn2, TIn3, TOut>)ptr;
             return del(a1, a2, a3);
         });
     }
@@ -180,8 +189,10 @@ public unsafe static class Extensions
     public static Func<TIn1, TIn2, TIn3, TIn4, TOut> ToDelegate<TIn1, TIn2, TIn3, TIn4, TOut>(this Assembler asm)
     {
         var s = BuilderToMemory.CompileX64Windows(asm);
+        // return Marshal.GetDelegateForFunctionPointer<Func<TIn1, TIn2, TIn3, TIn4, TOut>>((IntPtr)s.Pointer);
+        var ptr = (long)(IntPtr)s.Pointer;
         return ((a1, a2, a3, a4) => {
-            var del = (delegate* unmanaged[Cdecl]<TIn1, TIn2, TIn3, TIn4, TOut>)s.Pointer;
+            var del = (delegate* unmanaged[Cdecl]<TIn1, TIn2, TIn3, TIn4, TOut>)ptr;
             return del(a1, a2, a3, a4);
         });
     }
@@ -216,8 +227,10 @@ public unsafe static class Extensions
     public static Func<TIn1, TIn2, TIn3, TIn4, TIn5, TOut> ToDelegate<TIn1, TIn2, TIn3, TIn4, TIn5, TOut>(this Assembler asm)
     {
         var s = BuilderToMemory.CompileX64Windows(asm);
+        // return Marshal.GetDelegateForFunctionPointer<Func<TIn1, TIn2, TIn3, TIn4, TIn5, TOut>>((IntPtr)s.Pointer);
+        var ptr = (long)(IntPtr)s.Pointer;
         return ((a1, a2, a3, a4, a5) => {
-            var del = (delegate* unmanaged[Cdecl]<TIn1, TIn2, TIn3, TIn4, TIn5, TOut>)s.Pointer;
+            var del = (delegate* unmanaged[Cdecl]<TIn1, TIn2, TIn3, TIn4, TIn5, TOut>)ptr;
             return del(a1, a2, a3, a4, a5);
         });
     }
@@ -252,8 +265,10 @@ public unsafe static class Extensions
     public static Func<TIn1, TIn2, TIn3, TIn4, TIn5, TIn6, TOut> ToDelegate<TIn1, TIn2, TIn3, TIn4, TIn5, TIn6, TOut>(this Assembler asm)
     {
         var s = BuilderToMemory.CompileX64Windows(asm);
+        // return Marshal.GetDelegateForFunctionPointer<Func<TIn1, TIn2, TIn3, TIn4, TIn5, TIn6, TOut>>((IntPtr)s.Pointer);
+        var ptr = (long)(IntPtr)s.Pointer;
         return ((a1, a2, a3, a4, a5, a6) => {
-            var del = (delegate* unmanaged[Cdecl]<TIn1, TIn2, TIn3, TIn4, TIn5, TIn6, TOut>)s.Pointer;
+            var del = (delegate* unmanaged[Cdecl]<TIn1, TIn2, TIn3, TIn4, TIn5, TIn6, TOut>)ptr;
             return del(a1, a2, a3, a4, a5, a6);
         });
     }
@@ -288,8 +303,10 @@ public unsafe static class Extensions
     public static Func<TIn1, TIn2, TIn3, TIn4, TIn5, TIn6, TIn7, TOut> ToDelegate<TIn1, TIn2, TIn3, TIn4, TIn5, TIn6, TIn7, TOut>(this Assembler asm)
     {
         var s = BuilderToMemory.CompileX64Windows(asm);
+        // return Marshal.GetDelegateForFunctionPointer<Func<TIn1, TIn2, TIn3, TIn4, TIn5, TIn6, TIn7, TOut>>((IntPtr)s.Pointer);
+        var ptr = (long)(IntPtr)s.Pointer;
         return ((a1, a2, a3, a4, a5, a6, a7) => {
-            var del = (delegate* unmanaged[Cdecl]<TIn1, TIn2, TIn3, TIn4, TIn5, TIn6, TIn7, TOut>)s.Pointer;
+            var del = (delegate* unmanaged[Cdecl]<TIn1, TIn2, TIn3, TIn4, TIn5, TIn6, TIn7, TOut>)ptr;
             return del(a1, a2, a3, a4, a5, a6, a7);
         });
     }
