@@ -11,6 +11,11 @@ public unsafe static class Extensions
     var ins = "";
     for (int j = 1; j <= i; j++)
         ins += $"TIn{j}, ";
+    var passed = "";
+    for (int j = 1; j <= i; j++)
+        passed += $"a{j}, ";
+    if (passed.Length > 0)
+        passed = passed.Substring(0, passed.Length - 2);
 #>
     public struct UnmanagedFunctionWinX64<<#= ins #>TOut>
     {
@@ -37,6 +42,15 @@ public unsafe static class Extensions
     {
         var s = BuilderToMemory.CompileX64Windows(asm);
         return (delegate* unmanaged[Cdecl]<<#= ins #>TOut>)s.Pointer;
+    }
+
+    public static Func<<#= ins #>TOut> ToDelegate<<#= ins #>TOut>(this Assembler asm)
+    {
+        var s = BuilderToMemory.CompileX64Windows(asm);
+        return ((<#= passed #>) => {
+            var del = (delegate* unmanaged[Cdecl]<<#= ins #>TOut>)s.Pointer;
+            return del(<#= passed #>);
+        });
     }
 
 <# } #> 
