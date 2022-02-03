@@ -33,6 +33,15 @@ public unsafe static class Extensions
         return (delegate* unmanaged[Cdecl]<TOut>)s.Pointer;
     }
 
+    public static Func<TOut> ToDelegate<TOut>(this Assembler asm)
+    {
+        var s = BuilderToMemory.CompileX64Windows(asm);
+        return (() => {
+            var del = (delegate* unmanaged[Cdecl]<TOut>)s.Pointer;
+            return del();
+        });
+    }
+
     public struct UnmanagedFunctionWinX64<TIn1, TOut>
     {
         public delegate* unmanaged[Cdecl]<TIn1, TOut> Delegate { get; }
@@ -58,6 +67,15 @@ public unsafe static class Extensions
     {
         var s = BuilderToMemory.CompileX64Windows(asm);
         return (delegate* unmanaged[Cdecl]<TIn1, TOut>)s.Pointer;
+    }
+
+    public static Func<TIn1, TOut> ToDelegate<TIn1, TOut>(this Assembler asm)
+    {
+        var s = BuilderToMemory.CompileX64Windows(asm);
+        return ((a1) => {
+            var del = (delegate* unmanaged[Cdecl]<TIn1, TOut>)s.Pointer;
+            return del(a1);
+        });
     }
 
     public struct UnmanagedFunctionWinX64<TIn1, TIn2, TOut>
@@ -87,6 +105,15 @@ public unsafe static class Extensions
         return (delegate* unmanaged[Cdecl]<TIn1, TIn2, TOut>)s.Pointer;
     }
 
+    public static Func<TIn1, TIn2, TOut> ToDelegate<TIn1, TIn2, TOut>(this Assembler asm)
+    {
+        var s = BuilderToMemory.CompileX64Windows(asm);
+        return ((a1, a2) => {
+            var del = (delegate* unmanaged[Cdecl]<TIn1, TIn2, TOut>)s.Pointer;
+            return del(a1, a2);
+        });
+    }
+
     public struct UnmanagedFunctionWinX64<TIn1, TIn2, TIn3, TOut>
     {
         public delegate* unmanaged[Cdecl]<TIn1, TIn2, TIn3, TOut> Delegate { get; }
@@ -112,6 +139,15 @@ public unsafe static class Extensions
     {
         var s = BuilderToMemory.CompileX64Windows(asm);
         return (delegate* unmanaged[Cdecl]<TIn1, TIn2, TIn3, TOut>)s.Pointer;
+    }
+
+    public static Func<TIn1, TIn2, TIn3, TOut> ToDelegate<TIn1, TIn2, TIn3, TOut>(this Assembler asm)
+    {
+        var s = BuilderToMemory.CompileX64Windows(asm);
+        return ((a1, a2, a3) => {
+            var del = (delegate* unmanaged[Cdecl]<TIn1, TIn2, TIn3, TOut>)s.Pointer;
+            return del(a1, a2, a3);
+        });
     }
 
     public struct UnmanagedFunctionWinX64<TIn1, TIn2, TIn3, TIn4, TOut>
@@ -141,6 +177,15 @@ public unsafe static class Extensions
         return (delegate* unmanaged[Cdecl]<TIn1, TIn2, TIn3, TIn4, TOut>)s.Pointer;
     }
 
+    public static Func<TIn1, TIn2, TIn3, TIn4, TOut> ToDelegate<TIn1, TIn2, TIn3, TIn4, TOut>(this Assembler asm)
+    {
+        var s = BuilderToMemory.CompileX64Windows(asm);
+        return ((a1, a2, a3, a4) => {
+            var del = (delegate* unmanaged[Cdecl]<TIn1, TIn2, TIn3, TIn4, TOut>)s.Pointer;
+            return del(a1, a2, a3, a4);
+        });
+    }
+
     public struct UnmanagedFunctionWinX64<TIn1, TIn2, TIn3, TIn4, TIn5, TOut>
     {
         public delegate* unmanaged[Cdecl]<TIn1, TIn2, TIn3, TIn4, TIn5, TOut> Delegate { get; }
@@ -166,6 +211,15 @@ public unsafe static class Extensions
     {
         var s = BuilderToMemory.CompileX64Windows(asm);
         return (delegate* unmanaged[Cdecl]<TIn1, TIn2, TIn3, TIn4, TIn5, TOut>)s.Pointer;
+    }
+
+    public static Func<TIn1, TIn2, TIn3, TIn4, TIn5, TOut> ToDelegate<TIn1, TIn2, TIn3, TIn4, TIn5, TOut>(this Assembler asm)
+    {
+        var s = BuilderToMemory.CompileX64Windows(asm);
+        return ((a1, a2, a3, a4, a5) => {
+            var del = (delegate* unmanaged[Cdecl]<TIn1, TIn2, TIn3, TIn4, TIn5, TOut>)s.Pointer;
+            return del(a1, a2, a3, a4, a5);
+        });
     }
 
     public struct UnmanagedFunctionWinX64<TIn1, TIn2, TIn3, TIn4, TIn5, TIn6, TOut>
@@ -195,6 +249,15 @@ public unsafe static class Extensions
         return (delegate* unmanaged[Cdecl]<TIn1, TIn2, TIn3, TIn4, TIn5, TIn6, TOut>)s.Pointer;
     }
 
+    public static Func<TIn1, TIn2, TIn3, TIn4, TIn5, TIn6, TOut> ToDelegate<TIn1, TIn2, TIn3, TIn4, TIn5, TIn6, TOut>(this Assembler asm)
+    {
+        var s = BuilderToMemory.CompileX64Windows(asm);
+        return ((a1, a2, a3, a4, a5, a6) => {
+            var del = (delegate* unmanaged[Cdecl]<TIn1, TIn2, TIn3, TIn4, TIn5, TIn6, TOut>)s.Pointer;
+            return del(a1, a2, a3, a4, a5, a6);
+        });
+    }
+
     public struct UnmanagedFunctionWinX64<TIn1, TIn2, TIn3, TIn4, TIn5, TIn6, TIn7, TOut>
     {
         public delegate* unmanaged[Cdecl]<TIn1, TIn2, TIn3, TIn4, TIn5, TIn6, TIn7, TOut> Delegate { get; }
@@ -220,6 +283,15 @@ public unsafe static class Extensions
     {
         var s = BuilderToMemory.CompileX64Windows(asm);
         return (delegate* unmanaged[Cdecl]<TIn1, TIn2, TIn3, TIn4, TIn5, TIn6, TIn7, TOut>)s.Pointer;
+    }
+
+    public static Func<TIn1, TIn2, TIn3, TIn4, TIn5, TIn6, TIn7, TOut> ToDelegate<TIn1, TIn2, TIn3, TIn4, TIn5, TIn6, TIn7, TOut>(this Assembler asm)
+    {
+        var s = BuilderToMemory.CompileX64Windows(asm);
+        return ((a1, a2, a3, a4, a5, a6, a7) => {
+            var del = (delegate* unmanaged[Cdecl]<TIn1, TIn2, TIn3, TIn4, TIn5, TIn6, TIn7, TOut>)s.Pointer;
+            return del(a1, a2, a3, a4, a5, a6, a7);
+        });
     }
 
  
