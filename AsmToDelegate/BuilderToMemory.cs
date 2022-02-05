@@ -23,7 +23,9 @@ internal static unsafe class BuilderToMemory
         var codeWriter = new StreamCodeWriter(stream);
         asm.Assemble(codeWriter, 0);
         ReadOnlySpan<byte> span = new(stream.GetBuffer(), 0, (int)stream.Length);
-        var alloc = AllocationHelpers.AllocateExecutable(span);
+
+        void* alloc = AllocationHelpers.AllocateExecutable(span);
+
         return new() { Pointer = alloc, Size = (nuint)span.Length };
     }
 }

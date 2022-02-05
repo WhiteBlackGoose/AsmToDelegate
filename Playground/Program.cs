@@ -3,6 +3,13 @@ using Iced.Intel;
 using static Iced.Intel.AssemblerRegisters;
 using AsmToDelegate;
 
+var add = new Assembler(bitness: 64);
+add.mov(rax, rcx);
+add.add(rax, rdx);
+add.ret();
+
+
+
 unsafe
 {
     var a = new Assembler(64);

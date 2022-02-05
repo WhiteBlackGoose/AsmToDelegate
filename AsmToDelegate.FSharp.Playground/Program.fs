@@ -2,11 +2,13 @@
 open type Iced.Intel.AssemblerRegisters
 open System.Threading
 
-let getCycles = asm {
+let getCPUCycles = asm {
     rdtsc
     shl rdx 32uy
     add rax rdx
     ret
 }
 
-printfn $"{getCycles ()}"
+let cpuCount = getCPUCycles ()
+printfn "%i" cpuCount
+

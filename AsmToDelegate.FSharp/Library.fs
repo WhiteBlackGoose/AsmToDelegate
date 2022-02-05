@@ -4,45 +4,30 @@ open Iced.Intel
 open AsmToDelegate
 
 type AsmBuilder () =
-    member _.Yield _ = []
+    member _.Yield _ = Assembler(bitness = 64)
 
     [<CustomOperation("rdtsc", MaintainsVariableSpace=true)>]
-    member _.Rdtsc (list : (string * obj) list) =
-        ("rdtsc", obj ()) :: list
+    member _.Rdtsc (asm : Assembler) =
+        asm.rdtsc()
+        asm
     
     [<CustomOperation("shl", MaintainsVariableSpace=true)>]
-    member _.Shl (list : (string * obj) list, a : 'a, b : 'b) =
-        ("shl", (a, b) :> obj) :: list
+    member _.Shl (asm : Assembler, a : AssemblerRegister64, b : byte) =
+        asm.shl(a, b)
+        asm
     
     [<CustomOperation("add", MaintainsVariableSpace=true)>]
-    member _.Add (list : (string * obj) list, a : 'a, b : 'b) =
-        ("add", (a, b) :> obj) :: list
+    member _.Add (asm : Assembler, a : AssemblerRegister64, b : AssemblerRegister64) =
+        asm.add(a, b)
+        asm
     
     [<CustomOperation("ret", MaintainsVariableSpace=true)>]
-    member _.Ret (list : (string * obj) list) =
-        ("ret", obj ()) :: list
+    member _.Ret (asm : Assembler) =
+        asm.ret()
+        asm
 
-    member _.Run list =
-        let assembler = Assembler(64)
-        for name, args in List.rev list do
-            let requestedTypes, requestedValues =
-                let argsType = args.GetType()
-                argsType.GenericTypeArguments |> List.ofArray,
-                argsType.GetProperties() |> Array.map (fun c -> c.GetValue(args))
-            let mis =
-                typeof<Assembler>.GetMethods()
-                |> Seq.filter (fun mi -> mi.Name = name)
-                |> Seq.filter (fun mi ->
-                    let miParamTypes =
-                        mi.GetParameters()
-                        |> Seq.map (fun p -> p.ParameterType)
-                        |> List.ofSeq
-                    miParamTypes = requestedTypes)
-                |> List.ofSeq
-            match Seq.tryExactlyOne mis with
-            | None -> raise (System.Exception $"Ohno! Found: {mis} for {name}")
-            | Some mi -> mi.Invoke(assembler, requestedValues) |> ignore
-        let del = assembler.ToDelegateUnsafe<int64>()
+    member _.Run (asm : Assembler) =
+        let del = asm.ToDelegateUnsafe<int64>()
         del.Invoke
         
 let asm = AsmBuilder ()

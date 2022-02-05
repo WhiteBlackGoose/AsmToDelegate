@@ -8,7 +8,8 @@ public unsafe static class AllocationHelpers
 {
     public static void* AllocateExecutable(ReadOnlySpan<byte> content)
     {
-        var buffer = VirtualAlloc(null, (nuint)content.Length, AllocationType.MEM_COMMIT | AllocationType.MEM_RESERVE, MemoryProtection.PAGE_READWRITE);
+        var buffer = VirtualAlloc(null, (nuint)content.Length, 
+            AllocationType.MEM_COMMIT | AllocationType.MEM_RESERVE, MemoryProtection.PAGE_READWRITE);
 
         if (buffer is null)
             Helpers.ThrowLastError();
