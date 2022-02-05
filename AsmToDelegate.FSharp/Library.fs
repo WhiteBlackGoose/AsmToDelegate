@@ -3,26 +3,28 @@
 open Iced.Intel
 open AsmToDelegate
 
-let rdtsc = ("rdtsc", obj ())
-
-let shl a b = ("shl", (a, b) :> obj)
-
-let ret = ("ret", obj ())
-
-let mov a b = ("mov", (a, b) :> obj)
-
-let add a b = ("add", (a, b) :> obj)
-
 type AsmBuilder () =
-    member _.Yield el = [ el ]
+    member _.Yield _ = []
 
-    member _.Delay f = f()
-
-    member _.Combine (a, b) = List.append a b
+    [<CustomOperation("rdtsc", MaintainsVariableSpace=true)>]
+    member _.Rdtsc (list : (string * obj) list) =
+        ("rdtsc", obj ()) :: list
+    
+    [<CustomOperation("shl", MaintainsVariableSpace=true)>]
+    member _.Shl (list : (string * obj) list, a : 'a, b : 'b) =
+        ("shl", (a, b) :> obj) :: list
+    
+    [<CustomOperation("add", MaintainsVariableSpace=true)>]
+    member _.Add (list : (string * obj) list, a : 'a, b : 'b) =
+        ("add", (a, b) :> obj) :: list
+    
+    [<CustomOperation("ret", MaintainsVariableSpace=true)>]
+    member _.Ret (list : (string * obj) list) =
+        ("ret", obj ()) :: list
 
     member _.Run list =
         let assembler = Assembler(64)
-        for name, args in list do
+        for name, args in List.rev list do
             let requestedTypes, requestedValues =
                 let argsType = args.GetType()
                 argsType.GenericTypeArguments |> List.ofArray,
